@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f1f1f1;
+}
+
+@layer components {
+  .keyboard {
+    @apply grid grid-cols-4 gap-4 p-4;
+  }
+  .key {
+    @apply bg-white text-center shadow rounded py-2 active:bg-sky-50 transition;
+  }
+  .key.active {
+    @apply text-sky-600 bg-sky-400/10;
+  }
+}

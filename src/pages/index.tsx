@@ -1,20 +1,16 @@
-import { useLocalStorageState, useSet } from 'ahooks'
+import { useSet } from 'ahooks'
 import clsx from 'clsx'
 
 const modifierKeys = ['control', 'shift', 'alt', 'command']
 const keysGroup = [['enter', 'escape', 'tab'], new Array(12).fill(0).map((_, i) => `f${i + 1}`)]
 
 export default function Home() {
-  const [remote, setRemote] = useLocalStorageState('remote', {
-    defaultValue: 'http://kamiya.local:4444',
-  })
-
   const [modifier, modifierAction] = useSet<string>([])
 
   const tap = async (key: string) => {
     if (!key) return
     try {
-      const url = new URL('/api/tap', remote)
+      const url = new URL('/api/tap', location.origin)
       url.searchParams.set('key', key.toLowerCase())
       modifier.forEach((key) => url.searchParams.append('modifier', key))
       const res = await fetch(url, { method: 'POST' }).then((r) => r.json())
@@ -26,16 +22,6 @@ export default function Home() {
   }
   return (
     <main>
-      <label className="p-4 block">
-        <div>remote</div>
-        <input
-          type="text"
-          className="border w-full shadow rounded px-2 py-1"
-          placeholder="remote url"
-          value={remote}
-          onChange={(e) => setRemote(e.target.value)}
-        />
-      </label>
       <div className="keyboard">
         {modifierKeys.map((key) => (
           <div
